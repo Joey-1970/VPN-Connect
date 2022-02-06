@@ -104,9 +104,9 @@
 		$AvgDuration = $Result["AvgDuration"];
 		$MaxDuration = $Result["MaxDuration"];
 		
-		/*
 	
-		If ($Ping <> GetValueInteger($this->GetIDForIdent("State"))) {
+		If ($Ping <> $this->GetValue("State")) {
+			/*
 			$SentDisorder = $this->ReadPropertyBoolean("SentDisorder");
 			If ($Ping == 1) { // offline
 				$this->Notification($this->ReadPropertyString("TextDown"));
@@ -124,9 +124,10 @@
 					$this->Notification($this->ReadPropertyString("TextUp"));
 				}
 			}
-			SetValueInteger($this->GetIDForIdent("State"), $Ping);
+			*/
+			$this->SetValueInteger("State", $Ping);
 		}
-		*/
+	
 		If ($SuccessRate <> $this->GetValue("SuccessRate")) {
 			$this->SetValue("SuccessRate", $SuccessRate);
 		}
