@@ -1,0 +1,14 @@
+{
+  "id": "{D3B7DEC4-2264-127D-91C5-24E97D4EA3E8}",
+  "name": "VPNConnect",
+  "type": 3,
+  "vendor": "JP-IPS-Modules",
+  "aliases":
+  [
+    "VPNConnect"
+  ],
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "VPNConnect"
+}
