@@ -125,7 +125,7 @@
 				}
 			}
 			*/
-			$this->SetValueInteger("State", $Ping);
+			$this->SetValue("State", $Ping);
 		}
 	
 		If ($SuccessRate <> $this->GetValue("SuccessRate")) {
