@@ -146,7 +146,7 @@
 	private function Multiple_Ping()
 	{
     		$this->SendDebug("Multiple_Ping", "Ausfuehrung", 0);
-		$IP = $this->ReadPropertyString("IP");
+		$IP = $this->ReadPropertyString("IPAddress");
 		$MaxWaitTime = $this->ReadPropertyInteger("MaxWaitTime");
 		$MaxWaitTime = min(1000, max(50, $MaxWaitTime));
 		$Tries = $this->ReadPropertyInteger("Tries");
