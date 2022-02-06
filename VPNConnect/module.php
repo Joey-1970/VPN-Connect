@@ -28,9 +28,9 @@
 		$this->RegisterVariableInteger("LastUpdate", "Letztes Update", "~UnixTimestamp", 10);
 		$this->RegisterVariableInteger("State", "Status", "VPNConnect.State", 40);
 		$this->RegisterVariableInteger("SuccessRate", "Erfolgsqoute", "~Intensity.100", 60);
-		$this->RegisterVariableFloat("MinDuration", "Minimale Dauer", "IPS2LAN.ms", 70);
+		$this->RegisterVariableFloat("MinDuration", "Minimale Dauer", "VPNConnect.ms", 70);
 		$this->RegisterVariableFloat("AvgDuration", "Durchschnittliche Dauer", "IPS2LAN.ms", 80);
-		$this->RegisterVariableFloat("MaxDuration", "Maximale Dauer", "IPS2LAN.ms", 90);
+		$this->RegisterVariableFloat("MaxDuration", "Maximale Dauer", "VPNConnect.ms", 90);
 
         }
        	
