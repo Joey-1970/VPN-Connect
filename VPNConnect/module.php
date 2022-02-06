@@ -127,19 +127,19 @@
 			SetValueInteger($this->GetIDForIdent("State"), $Ping);
 		}
 		*/
-		If ($SuccessRate <> $this-GetValue("SuccessRate")) {
-			$this-SetValue("SuccessRate", $SuccessRate);
+		If ($SuccessRate <> $this->GetValue("SuccessRate")) {
+			$this->SetValue("SuccessRate", $SuccessRate);
 		}
-		If ($MinDuration <> $this-GetValue("MinDuration")) {
-			$this-SetValue("MinDuration", $MinDuration);
+		If ($MinDuration <> $this->GetValue("MinDuration")) {
+			$this->SetValue("MinDuration", $MinDuration);
 		}
-		If ($AvgDuration <> $this-GetValue("AvgDuration")) {
-			$this-SetValue("AvgDuration", $AvgDuration);
+		If ($AvgDuration <> $this->GetValue("AvgDuration")) {
+			$this->SetValue("AvgDuration", $AvgDuration);
 		}
-		If ($MaxDuration <> $this-GetValue("MaxDuration")) {
-			$this-SetValue("MaxDuration", $MaxDuration);
+		If ($MaxDuration <> $this->GetValue("MaxDuration")) {
+			$this->SetValue("MaxDuration", $MaxDuration);
 		}
-		$this-SetValue("LastUpdate", time() );
+		$this->SetValue("LastUpdate", time() );
 		
 	}
 	
