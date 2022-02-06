@@ -66,25 +66,19 @@
 		
 		
 			
-			If ($this->ReadPropertyBoolean("Open") == true) {
-				
-					If ($this->GetStatus() <> 102) {
-						$this->SetStatus(102);
-					}
-					$this->GetDataUpdate();
-					$this->SetTimerInterval("ConnectionTest", 3 * 60 * 1000);
-				}
+		If ($this->ReadPropertyBoolean("Open") == true) {
+			If ($this->GetStatus() <> 102) {
+				$this->SetStatus(102);
 			}
-			else {
-				If ($this->GetStatus() <> 104) {
-					$this->SetStatus(104);
-				}
-				$this->SetTimerInterval("ConnectionTest", 0);
-			}	   
+			$this->GetDataUpdate();
+			$this->SetTimerInterval("ConnectionTest", 3 * 60 * 1000);
 		}
-		
-		
-		
+		else {
+			If ($this->GetStatus() <> 104) {
+				$this->SetStatus(104);
+			}
+			$this->SetTimerInterval("ConnectionTest", 0);
+		}	   
 	}
 	
 	public function RequestAction($Ident, $Value) 
