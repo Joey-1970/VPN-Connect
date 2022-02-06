@@ -2,8 +2,6 @@
     // Klassendefinition
     class VPNConnect extends IPSModule 
     {
-	 // https://mpd.readthedocs.io/en/stable/protocol.html#command-reference
-	    
 	// Überschreibt die interne IPS_Create($id) Funktion
         public function Create() 
         {
@@ -28,7 +26,7 @@
 		
 		// Status-Variablen anlegen
 		$this->RegisterVariableInteger("LastUpdate", "Letztes Update", "~UnixTimestamp", 10);
-	
+		$this->RegisterVariableInteger("State", "Status", "VPNConnect.State", 40);
 		$this->RegisterVariableInteger("SuccessRate", "Erfolgsqoute", "~Intensity.100", 60);
 		$this->RegisterVariableFloat("MinDuration", "Minimale Dauer", "IPS2LAN.ms", 70);
 		$this->RegisterVariableFloat("AvgDuration", "Durchschnittliche Dauer", "IPS2LAN.ms", 80);
@@ -73,7 +71,7 @@
 					If ($this->GetStatus() <> 102) {
 						$this->SetStatus(102);
 					}
-				
+					$this->GetDataUpdate();
 					$this->SetTimerInterval("ConnectionTest", 3 * 60 * 1000);
 				}
 			}
