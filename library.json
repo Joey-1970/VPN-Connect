@@ -1,0 +1,12 @@
+{
+  "id": "{B78EEF72-A9C9-E950-2296-526D7D33569B}",
+  "author": "Joachim Päper",
+  "name": "VPNControl",
+  "url": "www.ip-symcon.de",
+  "compatibility": {
+        "version": "6.0"
+  },
+  "version": "1.0",
+  "build": 0,
+  "date": 0
+}
