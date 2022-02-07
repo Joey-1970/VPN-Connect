@@ -243,7 +243,7 @@
 			If ($Response <> $this->GetValue("VPNFeedback")) {
 				$this->SetValue("VPNFeedback", $Response);
 			}
-			$this->SendDebug("StartVPN", "Rueckmeldung: ".$Response, 0);
+			$this->SendDebug("StopVPN", "Rueckmeldung: ".$Response, 0);
 			$this->SetValue("VPNActive", false);
 		}
 	}
