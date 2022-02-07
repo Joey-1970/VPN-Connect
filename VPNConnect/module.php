@@ -211,6 +211,9 @@
 			$this->SendDebug("StartVPN", "Ausfuehrung", 0);
 			$Message = 'sudo vpnc '.$VPNConfigFile; 
 			$Response = shell_exec($Message);
+			If ($Response <> $this->GetValue("VPNFeedback")) {
+				$this->SetValue("VPNFeedback", $Response);
+			}
 		}
 	}
 	    
@@ -220,6 +223,9 @@
 			$this->SendDebug("StartVPN", "Ausfuehrung", 0);
 			$Message = 'sudo vpnc-disconnect'; 
 			$Response = shell_exec($Message);
+			If ($Response <> $this->GetValue("VPNFeedback")) {
+				$this->SetValue("VPNFeedback", $Response);
+			}
 		}
 	}
 	
