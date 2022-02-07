@@ -94,6 +94,9 @@
 			}
 			$this->GetDataUpdate();
 			$this->SetTimerInterval("ConnectionTest", $this->ReadPropertyInteger("TimerConnectionTest") * 60 * 1000);
+			If ((IPS_GetKernelRunlevel() == KR_READY) AND ($this->ReadPropertyBoolean("StartVPNwithIPS") == true)) {
+				this->StartVPN();
+			}
 		}
 		else {
 			If ($this->GetStatus() <> 104) {
@@ -145,25 +148,29 @@
 		
 	
 		If ($Ping <> $this->GetValue("State")) {
-			/*
-			$SentDisorder = $this->ReadPropertyBoolean("SentDisorder");
+			
+			//$SentDisorder = $this->ReadPropertyBoolean("SentDisorder");
 			If ($Ping == 1) { // offline
-				$this->Notification($this->ReadPropertyString("TextDown"));
-			}
-			elseif ($Ping == 2) { // gestört
+				//$this->Notification($this->ReadPropertyString("TextDown"));
+				If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ReadPropertyBoolean("VPNAutoRestart") == true) AND $this->GetValue("VPNActive", true)) {
+					$this->StartVPN();
+				}
+			} elseif ($Ping == 2) { // gestört
+				/*
 				If ($SentDisorder == true) {
 					$this->Notification($this->ReadPropertyString("TextDisorder"));
 				}
-			}
-			If ($Ping == 3) { // online
+				*/
+			} elseif ($Ping == 3) { // online
+				/*
 				If ($SentDisorder == true) {
 					$this->Notification($this->ReadPropertyString("TextUp"));
 				}
 				elseif (($SentDisorder == false) AND (GetValueInteger($this->GetIDForIdent("State")) <> 2)) {
 					$this->Notification($this->ReadPropertyString("TextUp"));
 				}
+				*/
 			}
-			*/
 			$this->SetValue("State", $Ping);
 		}
 	
