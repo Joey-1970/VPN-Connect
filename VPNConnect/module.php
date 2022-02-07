@@ -222,12 +222,14 @@
 			If ($Response <> $this->GetValue("VPNFeedback")) {
 				$this->SetValue("VPNFeedback", $Response);
 			}
+			$this->SendDebug("StartVPN", "Rueckmeldung: ".$Response, 0);
 			// jetzt starten
 			$Message = 'sudo vpnc '.$VPNConfigFile; 
 			$Response = shell_exec($Message);
 			If ($Response <> $this->GetValue("VPNFeedback")) {
 				$this->SetValue("VPNFeedback", $Response);
 			}
+			$this->SendDebug("StartVPN", "Rueckmeldung: ".$Response, 0);
 			$this->SetValue("VPNActive", true);
 		}
 	}
@@ -241,6 +243,7 @@
 			If ($Response <> $this->GetValue("VPNFeedback")) {
 				$this->SetValue("VPNFeedback", $Response);
 			}
+			$this->SendDebug("StartVPN", "Rueckmeldung: ".$Response, 0);
 			$this->SetValue("VPNActive", false);
 		}
 	}
