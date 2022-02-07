@@ -7,6 +7,8 @@
         {
             	// Diese Zeile nicht löschen.
             	parent::Create();
+		$this->RegisterMessage(0, IPS_KERNELSTARTED);
+		
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyString("IPAddress", "127.0.0.1");
 		$this->RegisterPropertyString("VPNConfigFile", "fritzbox.conf");
@@ -100,6 +102,18 @@
 			$this->SetTimerInterval("ConnectionTest", 0);
 		}	   
 	}
+	    
+	public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
+    	{
+ 		switch ($Message) {
+			case IPS_KERNELSTARTED:
+				If ($this->ReadPropertyBoolean("StartVPNwithIPS") == true) {
+					$this->StartVPN();
+				}
+				break;
+			
+		}
+    	}      
 	
 	public function RequestAction($Ident, $Value) 
 	{
