@@ -38,6 +38,7 @@
 		$this->EnableAction("VPNAutoRestart");
 		$this->RegisterVariableBoolean("VPNActive", "VPN aktivieren", "~Switch", 120);
 		$this->EnableAction("VPNActive");
+		$this->RegisterVariableString("VPNFeedback", "VPN Rückmeldung", "", 130);
 		
 
         }
