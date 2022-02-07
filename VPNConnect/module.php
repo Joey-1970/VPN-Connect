@@ -215,10 +215,13 @@
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$VPNConfigFile = $this->ReadPropertyString("VPNConfigFile");
-			$this->SendDebug("StartVPN", "Ausfuehrung", 0);
+			$this->SendDebug("StartVPN", "Ausfuehrung mit Datei: ".$VPNConfigFile, 0);
 			// zur Sicherheit einmal schließen
 			$Message = 'sudo vpnc-disconnect'; 
 			$Response = shell_exec($Message);
+			If ($Response <> $this->GetValue("VPNFeedback")) {
+				$this->SetValue("VPNFeedback", $Response);
+			}
 			// jetzt starten
 			$Message = 'sudo vpnc '.$VPNConfigFile; 
 			$Response = shell_exec($Message);
@@ -232,7 +235,7 @@
 	public function StopVPN()
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
-			$this->SendDebug("StartVPN", "Ausfuehrung", 0);
+			$this->SendDebug("StopVPN", "Ausfuehrung", 0);
 			$Message = 'sudo vpnc-disconnect'; 
 			$Response = shell_exec($Message);
 			If ($Response <> $this->GetValue("VPNFeedback")) {
