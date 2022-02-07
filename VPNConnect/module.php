@@ -10,6 +10,8 @@
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyString("IPAddress", "127.0.0.1");
 		$this->RegisterPropertyString("VPNConfigFile", "fritzbox.conf");
+		$this->RegisterPropertyBoolean("StartVPNwithIPS", false);
+		$this->RegisterPropertyBoolean("VPNAutoRestart", false);
 		$this->RegisterPropertyInteger("MaxWaitTime", 100);
 		$this->RegisterPropertyInteger("Tries", 5);
 		$this->RegisterPropertyInteger("TimerConnectionTest", 3);
@@ -33,9 +35,7 @@
 		$this->RegisterVariableFloat("AvgDuration", "Durchschnittliche Dauer", "VPNConnect.ms", 80);
 		$this->RegisterVariableFloat("MaxDuration", "Maximale Dauer", "VPNConnect.ms", 90);
 		$this->RegisterVariableBoolean("StartVPNwithIPS", "VPN mit IP-Symcon starten", "~Switch", 100);
-		$this->EnableAction("StartVPNwithIPS");
-		$this->RegisterVariableBoolean("VPNAutoRestart", "Automatischer VPN Restart", "~Switch", 110);
-		$this->EnableAction("VPNAutoRestart");
+		$this->RegisterVariableBoolean("VPNAutoRestart", "VPN Restart Automatik", "~Switch", 110);
 		$this->RegisterVariableBoolean("VPNActive", "VPN aktivieren", "~Switch", 120);
 		$this->EnableAction("VPNActive");
 		$this->RegisterVariableString("VPNFeedback", "VPN Rückmeldung", "", 130);
@@ -76,14 +76,20 @@
                 // Diese Zeile nicht löschen
                 parent::ApplyChanges();
 		
+		If ($this->ReadPropertyBoolean("StartVPNwithIPS") <> $this->GetValue("StartVPNwithIPS")) {
+			$this->SetValue("StartVPNwithIPS", $this->ReadPropertyBoolean("StartVPNwithIPS"));
+		}
 		
+		If ($this->ReadPropertyBoolean("VPNAutoRestart") <> $this->GetValue("VPNAutoRestart")) {
+			$this->SetValue("VPNAutoRestart", $this->ReadPropertyBoolean("VPNAutoRestart"));
+		}
 			
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			If ($this->GetStatus() <> 102) {
 				$this->SetStatus(102);
 			}
 			$this->GetDataUpdate();
-			$this->SetTimerInterval("ConnectionTest", 3 * 60 * 1000);
+			$this->SetTimerInterval("ConnectionTest", $this->ReadPropertyInteger("TimerConnectionTest") * 60 * 1000);
 		}
 		else {
 			If ($this->GetStatus() <> 104) {
@@ -96,14 +102,13 @@
 	public function RequestAction($Ident, $Value) 
 	{
   		switch($Ident) {
-			case "StartVPNwithIPS":
-				
-				break;
-			case "VPNAutoRestart":
-				
-				break;
 			case "VPNActive":
-				
+				If ($Value == true) {
+					$this->StartVPN();
+				}
+				else {
+					$this->StopVPN();
+				}
 				break;
 			
 	      		
@@ -209,11 +214,16 @@
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$VPNConfigFile = $this->ReadPropertyString("VPNConfigFile");
 			$this->SendDebug("StartVPN", "Ausfuehrung", 0);
+			// zur Sicherheit einmal schließen
+			$Message = 'sudo vpnc-disconnect'; 
+			$Response = shell_exec($Message);
+			// jetzt starten
 			$Message = 'sudo vpnc '.$VPNConfigFile; 
 			$Response = shell_exec($Message);
 			If ($Response <> $this->GetValue("VPNFeedback")) {
 				$this->SetValue("VPNFeedback", $Response);
 			}
+			$this->SetValue("VPNActive", true);
 		}
 	}
 	    
@@ -226,6 +236,7 @@
 			If ($Response <> $this->GetValue("VPNFeedback")) {
 				$this->SetValue("VPNFeedback", $Response);
 			}
+			$this->SetValue("VPNActive", false);
 		}
 	}
 	
