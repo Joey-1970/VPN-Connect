@@ -9,7 +9,7 @@
             	parent::Create();
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyString("IPAddress", "127.0.0.1");
-		
+		$this->RegisterPropertyString("VPNConfigFile", "fritzbox.conf");
 		$this->RegisterPropertyInteger("MaxWaitTime", 100);
 		$this->RegisterPropertyInteger("Tries", 5);
 		$this->RegisterPropertyInteger("TimerConnectionTest", 3);
@@ -52,8 +52,9 @@
 		$arrayStatus[] = array("code" => 202, "icon" => "error", "caption" => "Kommunikationfehler!");
 		
 		$arrayElements = array(); 
-		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
+		$arrayElements[] = array("name" => "Open", "type" => "CheckBox", "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP die zum Test im VPN-Zielnetz angepingt werden soll");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "VPNConfigFile", "caption" => "Kompletter Name der Config-Datei");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "TimerConnectionTest", "caption" => "Wiederholung des Anpingen (1 - 15)", "minimum" => 1, "maximum" => 15, "suffix" => "min");
 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "MaxWaitTime", "caption" => "Maximale Wartezeit Ping (50 - 1000)", "minimum" => 50, "maximum" => 1000, "suffix" => "ms");
@@ -203,9 +204,24 @@
 	return serialize($Result);
 	}   
 	    
-	
+	public function StartVPN()
+	{
+		If ($this->ReadPropertyBoolean("Open") == true) {
+			$VPNConfigFile = $this->ReadPropertyString("VPNConfigFile");
+			$this->SendDebug("StartVPN", "Ausfuehrung", 0);
+			$Message = 'sudo vpnc '.$VPNConfigFile; 
+			$Response = shell_exec($Message);
+		}
+	}
 	    
-	
+	public function StopVPN()
+	{
+		If ($this->ReadPropertyBoolean("Open") == true) {
+			$this->SendDebug("StartVPN", "Ausfuehrung", 0);
+			$Message = 'sudo vpnc-disconnect'; 
+			$Response = shell_exec($Message);
+		}
+	}
 	
 	private function RegisterProfileInteger($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize)
 	{
