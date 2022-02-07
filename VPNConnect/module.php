@@ -9,9 +9,10 @@
             	parent::Create();
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyString("IPAddress", "127.0.0.1");
+		
 		$this->RegisterPropertyInteger("MaxWaitTime", 100);
 		$this->RegisterPropertyInteger("Tries", 5);
-		
+		$this->RegisterPropertyInteger("TimerConnectionTest", 3);
 		$this->RegisterTimer("ConnectionTest", 0, 'VPNConnect_GetDataUpdate($_IPS["TARGET"]);');
 		
 		// Profile anlegen
@@ -31,6 +32,13 @@
 		$this->RegisterVariableFloat("MinDuration", "Minimale Dauer", "VPNConnect.ms", 70);
 		$this->RegisterVariableFloat("AvgDuration", "Durchschnittliche Dauer", "VPNConnect.ms", 80);
 		$this->RegisterVariableFloat("MaxDuration", "Maximale Dauer", "VPNConnect.ms", 90);
+		$this->RegisterVariableBoolean("StartVPNwithIPS", "VPN mit IP-Symcon starten", "~Switch", 100);
+		$this->EnableAction("StartVPNwithIPS");
+		$this->RegisterVariableBoolean("VPNAutoRestart", "Automatischer VPN Restart", "~Switch", 110);
+		$this->EnableAction("VPNAutoRestart");
+		$this->RegisterVariableBoolean("VPNActive", "VPN aktivieren", "~Switch", 120);
+		$this->EnableAction("VPNActive");
+		
 
         }
        	
@@ -45,6 +53,8 @@
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP die zum Test im VPN-Zielnetz angepingt werden soll");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "TimerConnectionTest", "caption" => "Wiederholung des Anpingen (1 - 15)", "minimum" => 1, "maximum" => 15, "suffix" => "min");
+
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "MaxWaitTime", "caption" => "Maximale Wartezeit Ping (50 - 1000)", "minimum" => 50, "maximum" => 1000, "suffix" => "ms");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Tries", "caption" => "Versuche (2 - 15)", "minimum" => 2, "maximum" => 15, "suffix" => "Anzahl");
 
@@ -84,8 +94,14 @@
 	public function RequestAction($Ident, $Value) 
 	{
   		switch($Ident) {
-			case "Volume":
-				$this->SetVolume($Value);
+			case "StartVPNwithIPS":
+				
+				break;
+			case "VPNAutoRestart":
+				
+				break;
+			case "VPNActive":
+				
 				break;
 			
 	      		
