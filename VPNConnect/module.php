@@ -59,7 +59,9 @@
 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "MaxWaitTime", "caption" => "Maximale Wartezeit Ping (50 - 1000)", "minimum" => 50, "maximum" => 1000, "suffix" => "ms");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Tries", "caption" => "Versuche (2 - 15)", "minimum" => 2, "maximum" => 15, "suffix" => "Anzahl");
-
+		
+		$arrayElements[] = array("name" => "StartVPNwithIPS", "type" => "CheckBox", "caption" => "VPN mit IP-Symcon starten"); 
+		$arrayElements[] = array("name" => "VPNAutoRestart", "type" => "CheckBox", "caption" => "VPN Restart Automatik"); 
 		
 		
 				
