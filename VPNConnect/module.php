@@ -11,7 +11,18 @@
 		
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyString("IPAddress", "127.0.0.1");
+		
 		$this->RegisterPropertyString("VPNConfigFile", "fritzbox.conf");
+		
+		$this->RegisterPropertyString("Gateway", "xxxx.myfritz.net");
+		$this->RegisterPropertyString("ID", "VPN");
+		$this->RegisterPropertyString("Secret", "xxxx");
+		$this->RegisterPropertyString("Auth-Mode", "psk");
+		$this->RegisterPropertyString("Username", "User");
+		$this->RegisterPropertyString("Password", "Passwort");
+		$this->RegisterPropertyInteger("Local-Port", 0);
+		$this->RegisterPropertyInteger("DPD-Idle", 0);
+				
 		$this->RegisterPropertyBoolean("StartVPNwithIPS", false);
 		$this->RegisterPropertyBoolean("VPNAutoRestart", false);
 		$this->RegisterPropertyInteger("MaxWaitTime", 100);
@@ -56,7 +67,14 @@
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox", "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP die zum Test im VPN-Zielnetz angepingt werden soll");
+		
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "VPNConfigFile", "caption" => "Kompletter Name der Config-Datei");
+		
+		
+		
+		// sudo vpnc --gateway u8q5ewoy50wc3bc3.myfritz.net --id VPN --secret UIL6sEc3D9rvDaZA --auth-mode psk --username VPN --password Dennis#1999 --local-port 0 --dpd-idle 0
+		
+		
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "TimerConnectionTest", "caption" => "Wiederholung des Anpingen (1 - 15)", "minimum" => 1, "maximum" => 15, "suffix" => "min");
 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "MaxWaitTime", "caption" => "Maximale Wartezeit Ping (50 - 1000)", "minimum" => 50, "maximum" => 1000, "suffix" => "ms");
