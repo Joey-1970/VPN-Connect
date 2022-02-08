@@ -260,6 +260,14 @@
 		$Message = "ps aux |grep vpnc|grep -v grep|awk '{print $2}'"; 
 		$Response = shell_exec($Message);
 		$this->SendDebug("CheckVPNState", "Rueckmeldung: ".$Response, 0);
+		$MessageParts = explode(PHP_EOL, $Response);
+		If (count($MessageParts) == 1) {
+			$this->SendDebug("CheckVPNState", "Rueckmeldung: VPNC laeuft, keine Verbindung", 0);
+		} elseIf (count($MessageParts) == 2) {
+			$this->SendDebug("CheckVPNState", "Rueckmeldung: VPNC laeuft, Verbindung besteht", 0);
+		} else {
+			$this->SendDebug("CheckVPNState", "Rueckmeldung: ist: ".count($MessageParts), 0);
+		}
 	}
 	    
 	public function StartVPN()
@@ -291,6 +299,8 @@
 			}
 			$this->SendDebug("StartVPN", "Rueckmeldung: ".$Response, 0);
 			$this->SetValue("VPNActive", true);
+			
+			$this->GetDataUpdate();
 		}
 	}
 	    
