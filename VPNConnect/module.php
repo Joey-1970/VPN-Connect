@@ -19,7 +19,7 @@
 		$this->RegisterPropertyString("Username", "User");
 		$this->RegisterPropertyString("Password", "Passwort");
 		$this->RegisterPropertyInteger("LocalPort", 0);
-		$this->RegisterPropertyInteger("DPDIdle", 0);
+		$this->RegisterPropertyInteger("DPDidle", 0);
 				
 		$this->RegisterPropertyBoolean("StartVPNwithIPS", false);
 		$this->RegisterPropertyBoolean("VPNAutoRestart", false);
@@ -266,7 +266,7 @@
 			$DPDidle = $this->ReadPropertyInteger("DPDidle");
 		
 			
-			$this->SendDebug("StartVPN", "Ausfuehrung mit Datei: ".$VPNConfigFile, 0);
+			$this->SendDebug("StartVPN", "Ausfuehrung", 0);
 			// zur Sicherheit einmal schließen
 			$Message = 'sudo vpnc-disconnect'; 
 			$Response = shell_exec($Message);
@@ -275,7 +275,7 @@
 			}
 			$this->SendDebug("StartVPN", "Rueckmeldung: ".$Response, 0);
 			// jetzt starten		
-			$Message = 'sudo vpnc --gateway '.$Gateway.' --id '.$ID.' --secret '.$Secret.' --auth-mode '.$AuthMode.' --username '.$Username.' --password '.$Password.' --local-port '.$LocalPort.' --dpd-idle '.$DPDIdle; 
+			$Message = 'sudo vpnc --gateway '.$Gateway.' --id '.$ID.' --secret '.$Secret.' --auth-mode '.$AuthMode.' --username '.$Username.' --password '.$Password.' --local-port '.$LocalPort.' --dpd-idle '.$DPDidle; 
 			$Response = shell_exec($Message);
 			If ($Response <> $this->GetValue("VPNFeedback")) {
 				$this->SetValue("VPNFeedback", $Response);
