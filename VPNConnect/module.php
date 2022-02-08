@@ -37,7 +37,6 @@
 		
 		$this->RegisterProfileFloat("VPNConnect.ms", "Clock", "", " ms", 0, 1000, 0.001, 3);
 		
-		
 		// Status-Variablen anlegen
 		$this->RegisterVariableInteger("LastUpdate", "Letztes Update", "~UnixTimestamp", 10);
 		$this->RegisterVariableInteger("State", "Status", "VPNConnect.State", 40);
@@ -250,8 +249,18 @@
 		$Result["MinDuration"] = $MinDuration;
 		$Result["AvgDuration"] = $AvgDuration;
 		$Result["MaxDuration"] = $MaxDuration;
+		
+		$this->CheckVPNState();
+		
 	return serialize($Result);
 	}   
+	 
+	public function CheckVPNState()
+	{
+		$Message = "ps aux |grep vpnc|grep -v grep|awk '{print $2}'"; 
+		$Response = shell_exec($Message);
+		$this->SendDebug("CheckVPNState", "Rueckmeldung: ".$Response, 0);
+	}
 	    
 	public function StartVPN()
 	{
