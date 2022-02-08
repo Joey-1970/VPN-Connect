@@ -260,6 +260,7 @@
 		$Message = "ps aux |grep vpnc|grep -v grep|awk '{print $2}'"; 
 		$Response = shell_exec($Message);
 		$this->SendDebug("CheckVPNState", "Rueckmeldung: ".$Response, 0);
+		$Response = trim($Response, "\x00..\x1F");	
 		$MessageParts = explode(PHP_EOL, $Response);
 		$this->SendDebug("CheckVPNState", "Anzahl: ".count($MessageParts), 0);
 		If (count($MessageParts) == 1) {
