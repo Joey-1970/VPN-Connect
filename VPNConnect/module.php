@@ -315,6 +315,8 @@
 			}
 			$this->SendDebug("StopVPN", "Rueckmeldung: ".$Response, 0);
 			$this->SetValue("VPNActive", false);
+			
+			$this->GetDataUpdate();
 		}
 	}
 	
