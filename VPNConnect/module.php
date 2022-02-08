@@ -212,7 +212,6 @@
 	
 	private function Multiple_Ping()
 	{
-    		$this->SendDebug("Multiple_Ping", "Ausfuehrung", 0);
 		$IP = $this->ReadPropertyString("IPAddress");
 		$MaxWaitTime = $this->ReadPropertyInteger("MaxWaitTime");
 		$MaxWaitTime = min(1000, max(50, $MaxWaitTime));
@@ -259,16 +258,16 @@
 	{
 		$Message = "ps aux |grep vpnc|grep -v grep|awk '{print $2}'"; 
 		$Response = shell_exec($Message);
-		$this->SendDebug("CheckVPNState", "Rueckmeldung: ".$Response, 0);
 		$Response = trim($Response, "\x00..\x1F");	
 		$MessageParts = explode(PHP_EOL, $Response);
-		$this->SendDebug("CheckVPNState", "Anzahl: ".count($MessageParts), 0);
 		If (count($MessageParts) == 1) {
-			$this->SendDebug("CheckVPNState", "Rueckmeldung: VPNC laeuft, keine Verbindung", 0);
+			$this->SendDebug("CheckVPNState", "VPN Verbindung nicht", 0);
 		} elseIf (count($MessageParts) == 2) {
-			$this->SendDebug("CheckVPNState", "Rueckmeldung: VPNC laeuft, Verbindung besteht", 0);
+			$this->SendDebug("CheckVPNState", "VPN Verbindung besteht", 0);
+		} elseIf (count($MessageParts) == 4) {
+			$this->SendDebug("CheckVPNState", "VPN Verbindung wird beendet", 0);
 		} else {
-			$this->SendDebug("CheckVPNState", "Rueckmeldung: ist: ".count($MessageParts), 0);
+			$this->SendDebug("CheckVPNState", "Unbekannte Meldung: ".count($MessageParts), 0);
 		}
 	}
 	    
@@ -284,8 +283,6 @@
 			$LocalPort = $this->ReadPropertyInteger("LocalPort");
 			$DPDidle = $this->ReadPropertyInteger("DPDidle");
 		
-			
-			$this->SendDebug("StartVPN", "Ausfuehrung", 0);
 			// zur Sicherheit einmal schließen
 			$Message = 'sudo vpnc-disconnect'; 
 			$Response = shell_exec($Message);
@@ -309,7 +306,6 @@
 	public function StopVPN()
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
-			$this->SendDebug("StopVPN", "Ausfuehrung", 0);
 			$Message = 'sudo vpnc-disconnect'; 
 			$Response = shell_exec($Message);
 			If ($Response <> $this->GetValue("VPNFeedback")) {
