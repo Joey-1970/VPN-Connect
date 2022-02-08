@@ -261,6 +261,7 @@
 		$Response = shell_exec($Message);
 		$this->SendDebug("CheckVPNState", "Rueckmeldung: ".$Response, 0);
 		$MessageParts = explode(PHP_EOL, $Response);
+		$this->SendDebug("CheckVPNState", "Anzahl: ".count($MessageParts), 0);
 		If (count($MessageParts) == 1) {
 			$this->SendDebug("CheckVPNState", "Rueckmeldung: VPNC laeuft, keine Verbindung", 0);
 		} elseIf (count($MessageParts) == 2) {
