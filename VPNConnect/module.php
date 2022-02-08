@@ -12,16 +12,14 @@
             	$this->RegisterPropertyBoolean("Open", false);
 		$this->RegisterPropertyString("IPAddress", "127.0.0.1");
 		
-		$this->RegisterPropertyString("VPNConfigFile", "fritzbox.conf");
-		
 		$this->RegisterPropertyString("Gateway", "xxxx.myfritz.net");
 		$this->RegisterPropertyString("ID", "VPN");
 		$this->RegisterPropertyString("Secret", "xxxx");
-		$this->RegisterPropertyString("Auth-Mode", "psk");
+		$this->RegisterPropertyString("AuthMode", "psk");
 		$this->RegisterPropertyString("Username", "User");
 		$this->RegisterPropertyString("Password", "Passwort");
-		$this->RegisterPropertyInteger("Local-Port", 0);
-		$this->RegisterPropertyInteger("DPD-Idle", 0);
+		$this->RegisterPropertyInteger("LocalPort", 0);
+		$this->RegisterPropertyInteger("DPDIdle", 0);
 				
 		$this->RegisterPropertyBoolean("StartVPNwithIPS", false);
 		$this->RegisterPropertyBoolean("VPNAutoRestart", false);
@@ -68,33 +66,28 @@
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox", "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP die zum Test im VPN-Zielnetz angepingt werden soll");
 		
-		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "VPNConfigFile", "caption" => "Kompletter Name der Config-Datei");
-		
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
 		
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Gateway", "caption" => "Serveradresse / Server");
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "ID", "caption" => "IPSec-ID / Gruppenname");
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Secret", "caption" => "IPSec-Schlüssel / Shared Secret");
-		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Auth-Mode", "caption" => "Authentifizierungs-Mode (Default: psk)");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "AuthMode", "caption" => "Authentifizierungs-Mode (Default: psk)");
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Username", "caption" => "Nutzername / Account");
 		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Passwort (Kennwort des FRITZ!Box-Benutzers von Nutzername / Account)");
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Local-Port", "caption" => "Lokaler Port", "minimum" => 0, "maximum" => 65535, "suffix" => "Port");
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "DPD-Idle", "caption" => "Sende DPD wenn unbenutzt für x Sekunden (Default 0)", "minimum" => 0, "maximum" => 86400, "suffix" => "sek");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "LocalPort", "caption" => "Lokaler Port", "minimum" => 0, "maximum" => 65535, "suffix" => "Port");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "DPDidle", "caption" => "Sende DPD wenn unbenutzt für x Sekunden (Default 0)", "minimum" => 0, "maximum" => 86400, "suffix" => "sek");
 
-		
-		
-		// sudo vpnc --gateway u8q5ewoy50wc3bc3.myfritz.net --id VPN --secret UIL6sEc3D9rvDaZA --auth-mode psk --username VPN --password Dennis#1999 --local-port 0 --dpd-idle 0
-		
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
 		
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "TimerConnectionTest", "caption" => "Wiederholung des Anpingen (1 - 15)", "minimum" => 1, "maximum" => 15, "suffix" => "min");
-
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "MaxWaitTime", "caption" => "Maximale Wartezeit Ping (50 - 1000)", "minimum" => 50, "maximum" => 1000, "suffix" => "ms");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Tries", "caption" => "Versuche (2 - 15)", "minimum" => 2, "maximum" => 15, "suffix" => "Anzahl");
 		
 		$arrayElements[] = array("name" => "StartVPNwithIPS", "type" => "CheckBox", "caption" => "VPN mit IP-Symcon starten"); 
 		$arrayElements[] = array("name" => "VPNAutoRestart", "type" => "CheckBox", "caption" => "VPN Restart Automatik"); 
 		
-		
-				
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
+	
 		$arrayActions = array(); 
 		$arrayActions[] = array("type" => "Label", "label" => "Test Center"); 
 		$arrayActions[] = array("type" => "TestCenter", "name" => "TestCenter");
@@ -263,7 +256,16 @@
 	public function StartVPN()
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
-			$VPNConfigFile = $this->ReadPropertyString("VPNConfigFile");
+			$Gateway = $this->ReadPropertyString("Gateway");
+			$ID = $this->ReadPropertyString("ID");
+			$Secret = $this->ReadPropertyString("Secret");
+			$AuthMode = $this->ReadPropertyString("AuthMode");
+			$Username = $this->ReadPropertyString("Username");
+			$Password = $this->ReadPropertyString("Password");
+			$LocalPort = $this->ReadPropertyInteger("LocalPort");
+			$DPDidle = $this->ReadPropertyInteger("DPDidle");
+		
+			
 			$this->SendDebug("StartVPN", "Ausfuehrung mit Datei: ".$VPNConfigFile, 0);
 			// zur Sicherheit einmal schließen
 			$Message = 'sudo vpnc-disconnect'; 
@@ -273,6 +275,11 @@
 			}
 			$this->SendDebug("StartVPN", "Rueckmeldung: ".$Response, 0);
 			// jetzt starten
+			
+			// sudo vpnc --gateway u8qc3.myfritz.net --id ABC --secret UILaZA --auth-mode psk --username VN --password D999 --local-port 0 --dpd-idle 0
+		
+			
+			
 			$Message = 'sudo vpnc '.$VPNConfigFile; 
 			$Response = shell_exec($Message);
 			If ($Response <> $this->GetValue("VPNFeedback")) {
