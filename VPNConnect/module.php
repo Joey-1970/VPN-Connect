@@ -274,13 +274,8 @@
 				$this->SetValue("VPNFeedback", $Response);
 			}
 			$this->SendDebug("StartVPN", "Rueckmeldung: ".$Response, 0);
-			// jetzt starten
-			
-			// sudo vpnc --gateway u8qc3.myfritz.net --id ABC --secret UILaZA --auth-mode psk --username VN --password D999 --local-port 0 --dpd-idle 0
-		
-			
-			
-			$Message = 'sudo vpnc '.$VPNConfigFile; 
+			// jetzt starten		
+			$Message = 'sudo vpnc --gateway '.$Gateway.' --id '.$ID.' --secret '.$Secret.' --auth-mode '.$AuthMode.' --username '.$Username.' --password '.$Password.' --local-port '.$LocalPort.' --dpd-idle '.$DPDIdle; 
 			$Response = shell_exec($Message);
 			If ($Response <> $this->GetValue("VPNFeedback")) {
 				$this->SetValue("VPNFeedback", $Response);
