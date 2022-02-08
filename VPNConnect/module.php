@@ -261,7 +261,7 @@
 		$Response = trim($Response, "\x00..\x1F");	
 		$MessageParts = explode(PHP_EOL, $Response);
 		If (count($MessageParts) == 1) {
-			$this->SendDebug("CheckVPNState", "VPN Verbindung nicht", 0);
+			$this->SendDebug("CheckVPNState", "VPN Verbindung besteht nicht", 0);
 		} elseIf (count($MessageParts) == 2) {
 			$this->SendDebug("CheckVPNState", "VPN Verbindung besteht", 0);
 		} elseIf (count($MessageParts) == 4) {
