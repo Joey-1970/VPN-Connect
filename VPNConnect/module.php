@@ -64,8 +64,7 @@
 		
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox", "caption" => "Aktiv"); 
-		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP die zum Test im VPN-Zielnetz angepingt werden soll");
-		
+				
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
 		
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Gateway", "caption" => "Serveradresse / Server");
@@ -79,6 +78,7 @@
 
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
 		
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP die zum Test im VPN-Zielnetz angepingt werden soll");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "TimerConnectionTest", "caption" => "Wiederholung des Anpingen (1 - 15)", "minimum" => 1, "maximum" => 15, "suffix" => "min");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "MaxWaitTime", "caption" => "Maximale Wartezeit Ping (50 - 1000)", "minimum" => 50, "maximum" => 1000, "suffix" => "ms");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Tries", "caption" => "Versuche (2 - 15)", "minimum" => 2, "maximum" => 15, "suffix" => "Anzahl");
@@ -116,7 +116,7 @@
 			$this->GetDataUpdate();
 			$this->SetTimerInterval("ConnectionTest", $this->ReadPropertyInteger("TimerConnectionTest") * 60 * 1000);
 			If ((IPS_GetKernelRunlevel() == KR_READY) AND ($this->ReadPropertyBoolean("StartVPNwithIPS") == true)) {
-				this->StartVPN();
+				$this->StartVPN();
 			}
 		}
 		else {
