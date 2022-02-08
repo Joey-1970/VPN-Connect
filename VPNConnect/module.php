@@ -71,6 +71,16 @@
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "VPNConfigFile", "caption" => "Kompletter Name der Config-Datei");
 		
 		
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Gateway", "caption" => "Serveradresse / Server");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "ID", "caption" => "IPSec-ID / Gruppenname");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Secret", "caption" => "IPSec-Schlüssel / Shared Secret");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Auth-Mode", "caption" => "Authentifizierungs-Mode (Default: psk)");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Username", "caption" => "Nutzername / Account");
+		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Passwort (Kennwort des FRITZ!Box-Benutzers von Nutzername / Account)");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Local-Port", "caption" => "Lokaler Port", "minimum" => 0, "maximum" => 65535, "suffix" => "Port");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "DPD-Idle", "caption" => "Sende DPD wenn unbenutzt für x Sekunden (Default 0)", "minimum" => 0, "maximum" => 86400, "suffix" => "sek");
+
+		
 		
 		// sudo vpnc --gateway u8q5ewoy50wc3bc3.myfritz.net --id VPN --secret UIL6sEc3D9rvDaZA --auth-mode psk --username VPN --password Dennis#1999 --local-port 0 --dpd-idle 0
 		
