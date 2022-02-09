@@ -107,6 +107,10 @@
 		If ($this->ReadPropertyBoolean("VPNAutoRestart") <> $this->GetValue("VPNAutoRestart")) {
 			$this->SetValue("VPNAutoRestart", $this->ReadPropertyBoolean("VPNAutoRestart"));
 		}
+		
+		If ($this->GetValue("State") <> 0) {
+			$this->SetValue("State", 0);
+		}
 			
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			If ($this->GetStatus() <> 102) {
@@ -191,7 +195,7 @@
 				}
 				*/
 			}
-			$this->SetValue("State", $Ping);
+			
 		}
 	
 		If ($SuccessRate <> $this->GetValue("SuccessRate")) {
@@ -262,8 +266,14 @@
 		$MessageParts = explode(PHP_EOL, $Response);
 		If (count($MessageParts) == 1) {
 			$this->SendDebug("CheckVPNState", "VPN Verbindung besteht nicht", 0);
+			If ($this->GetValue("State") <> 1) {
+				$this->SetValue("State", 1);
+			}
 		} elseIf (count($MessageParts) == 2) {
 			$this->SendDebug("CheckVPNState", "VPN Verbindung besteht", 0);
+			If ($this->GetValue("State") <> 3) {
+				$this->SetValue("State", 3);
+			}
 		} elseIf (count($MessageParts) == 4) {
 			$this->SendDebug("CheckVPNState", "VPN Verbindung wird beendet", 0);
 		} else {
