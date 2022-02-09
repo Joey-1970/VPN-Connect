@@ -269,6 +269,10 @@
 			If ($this->GetValue("State") <> 1) {
 				$this->SetValue("State", 1);
 			}
+			If (($this->ReadPropertyBoolean("VPNAutoRestart") == true) AND ($this->GetValue("VPNActive") == true)) {
+				$this->SendDebug("CheckVPNState", "VPN Verbindung wird wieder aufgebaut", 0);
+				$this->StartVPN();
+			}
 		} elseIf (count($MessageParts) == 2) {
 			$this->SendDebug("CheckVPNState", "VPN Verbindung besteht", 0);
 			If ($this->GetValue("State") <> 3) {
