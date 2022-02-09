@@ -329,6 +329,10 @@
 			$this->SendDebug("StopVPN", "Rueckmeldung: ".$Response, 0);
 			$this->SetValue("VPNActive", false);
 			
+			If ($this->GetValue("State") <> 1) {
+				$this->SetValue("State", 1);
+			}
+			
 			$this->GetDataUpdate();
 		}
 	}
