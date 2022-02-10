@@ -120,7 +120,11 @@
 				$this->SetStatus(102);
 			}
 			$this->GetDataUpdate();
-			$this->SetTimerInterval("ConnectionTest", $this->ReadPropertyInteger("TimerConnectionTest") * 60 * 1000);
+			If ($this->ReadPropertyBoolean("PingTest") == true) {
+				$this->SetTimerInterval("ConnectionTest", $this->ReadPropertyInteger("TimerConnectionTest") * 60 * 1000);
+			} else {
+				$this->SetTimerInterval("ConnectionTest", 0);
+			}
 			$this->SetTimerInterval("VPNState", 60 * 1000);
 			If ((IPS_GetKernelRunlevel() == KR_READY) AND ($this->ReadPropertyBoolean("StartVPNwithIPS") == true)) {
 				$this->StartVPN();
