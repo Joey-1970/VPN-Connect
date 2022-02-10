@@ -10,7 +10,6 @@
 		$this->RegisterMessage(0, IPS_KERNELSTARTED);
 		
             	$this->RegisterPropertyBoolean("Open", false);
-		$this->RegisterPropertyString("IPAddress", "127.0.0.1");
 		
 		$this->RegisterPropertyString("Gateway", "xxxx.myfritz.net");
 		$this->RegisterPropertyString("ID", "VPN");
@@ -20,13 +19,17 @@
 		$this->RegisterPropertyString("Password", "Passwort");
 		$this->RegisterPropertyInteger("LocalPort", 0);
 		$this->RegisterPropertyInteger("DPDidle", 0);
-				
+		$this->RegisterTimer("VPNState", 0, 'VPNConnect_CheckVPNState($_IPS["TARGET"]);');
+		
+		$this->RegisterPropertyBoolean("PingTest", false);
+		$this->RegisterPropertyString("IPAddress", "127.0.0.1");		
 		$this->RegisterPropertyBoolean("StartVPNwithIPS", false);
-		$this->RegisterPropertyBoolean("VPNAutoRestart", false);
-		$this->RegisterPropertyInteger("MaxWaitTime", 100);
 		$this->RegisterPropertyInteger("Tries", 5);
 		$this->RegisterPropertyInteger("TimerConnectionTest", 3);
 		$this->RegisterTimer("ConnectionTest", 0, 'VPNConnect_GetDataUpdate($_IPS["TARGET"]);');
+		
+		$this->RegisterPropertyBoolean("VPNAutoRestart", false);
+		$this->RegisterPropertyInteger("MaxWaitTime", 100);
 		
 		// Profile anlegen
 		$this->RegisterProfileInteger("VPNConnect.State", "Information", "", "", 0, 3, 1);
@@ -63,19 +66,6 @@
 		
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox", "caption" => "Aktiv"); 
-		/*		
-		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
-		
-		
-		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Gateway", "caption" => "Serveradresse / Server");
-		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "ID", "caption" => "IPSec-ID / Gruppenname");
-		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Secret", "caption" => "IPSec-Schlüssel / Shared Secret");
-		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "AuthMode", "caption" => "Authentifizierungs-Mode (Default: psk)");
-		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Username", "caption" => "Nutzername / Account");
-		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Passwort (Kennwort des FRITZ!Box-Benutzers von Nutzername / Account)");
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "LocalPort", "caption" => "Lokaler Port", "minimum" => 0, "maximum" => 65535, "suffix" => "Port");
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "DPDidle", "caption" => "Sende DPD wenn unbenutzt für x Sekunden (Default 0)", "minimum" => 0, "maximum" => 86400, "suffix" => "sek");
-		*/
 		
 		$arrayExpansionPanelVPN = array();
 		$arrayExpansionPanelVPN[] = array("type" => "ValidationTextBox", "name" => "Gateway", "caption" => "Serveradresse / Server");
@@ -88,15 +78,14 @@
 		$arrayExpansionPanelVPN[] = array("type" => "NumberSpinner", "name" => "DPDidle", "caption" => "Sende DPD wenn unbenutzt für x Sekunden (Default 0)", "minimum" => 0, "maximum" => 86400, "suffix" => "sek");
 		$arrayElements[] = array("type" => "ExpansionPanel", "caption" => "VPN-Daten", "items" => $arrayExpansionPanelVPN);
 		
-		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
+		$arrayExpansionPanelPing = array();
+		$arrayExpansionPanelPing[] = array("name" => "PingTest", "type" => "CheckBox", "caption" => "Ping-Test"); 
+		$arrayExpansionPanelPing[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP die zum Test im VPN-Zielnetz angepingt werden soll");
+		$arrayExpansionPanelPing[] = array("type" => "NumberSpinner", "name" => "TimerConnectionTest", "caption" => "Wiederholung des Anpingen (1 - 15)", "minimum" => 1, "maximum" => 15, "suffix" => "min");
+		$arrayExpansionPanelPing[] = array("type" => "NumberSpinner", "name" => "MaxWaitTime", "caption" => "Maximale Wartezeit Ping (50 - 1000)", "minimum" => 50, "maximum" => 1000, "suffix" => "ms");
+		$arrayExpansionPanelPing[] = array("type" => "NumberSpinner", "name" => "Tries", "caption" => "Versuche (2 - 15)", "minimum" => 2, "maximum" => 15, "suffix" => "Anzahl");
+		$arrayElements[] = array("type" => "ExpansionPanel", "caption" => "Ping-Test", "items" => $arrayExpansionPanelPing);
 		
-		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP die zum Test im VPN-Zielnetz angepingt werden soll");
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "TimerConnectionTest", "caption" => "Wiederholung des Anpingen (1 - 15)", "minimum" => 1, "maximum" => 15, "suffix" => "min");
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "MaxWaitTime", "caption" => "Maximale Wartezeit Ping (50 - 1000)", "minimum" => 50, "maximum" => 1000, "suffix" => "ms");
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Tries", "caption" => "Versuche (2 - 15)", "minimum" => 2, "maximum" => 15, "suffix" => "Anzahl");
-		
-		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
-
 		$arrayElements[] = array("name" => "StartVPNwithIPS", "type" => "CheckBox", "caption" => "VPN mit IP-Symcon starten"); 
 		$arrayElements[] = array("name" => "VPNAutoRestart", "type" => "CheckBox", "caption" => "VPN Restart Automatik"); 
 		
@@ -132,6 +121,7 @@
 			}
 			$this->GetDataUpdate();
 			$this->SetTimerInterval("ConnectionTest", $this->ReadPropertyInteger("TimerConnectionTest") * 60 * 1000);
+			$this->SetTimerInterval("VPNState", 60 * 1000);
 			If ((IPS_GetKernelRunlevel() == KR_READY) AND ($this->ReadPropertyBoolean("StartVPNwithIPS") == true)) {
 				$this->StartVPN();
 			}
@@ -141,6 +131,7 @@
 				$this->SetStatus(104);
 			}
 			$this->SetTimerInterval("ConnectionTest", 0);
+			$this->SetTimerInterval("VPNState", 0);
 		}	   
 	}
 	    
@@ -176,41 +167,12 @@
 	    
 	public function GetDataUpdate()
 	{
-		
 		$Result = unserialize($this->Multiple_Ping());
 		$Ping = $Result["Ping"];
 		$SuccessRate = $Result["SuccessRate"];
 		$MinDuration = $Result["MinDuration"];
 		$AvgDuration = $Result["AvgDuration"];
 		$MaxDuration = $Result["MaxDuration"];
-		
-	
-		If ($Ping <> $this->GetValue("State")) {
-			
-			//$SentDisorder = $this->ReadPropertyBoolean("SentDisorder");
-			If ($Ping == 1) { // offline
-				//$this->Notification($this->ReadPropertyString("TextDown"));
-				If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ReadPropertyBoolean("VPNAutoRestart") == true) AND $this->GetValue("VPNActive", true)) {
-					$this->StartVPN();
-				}
-			} elseif ($Ping == 2) { // gestört
-				/*
-				If ($SentDisorder == true) {
-					$this->Notification($this->ReadPropertyString("TextDisorder"));
-				}
-				*/
-			} elseif ($Ping == 3) { // online
-				/*
-				If ($SentDisorder == true) {
-					$this->Notification($this->ReadPropertyString("TextUp"));
-				}
-				elseif (($SentDisorder == false) AND (GetValueInteger($this->GetIDForIdent("State")) <> 2)) {
-					$this->Notification($this->ReadPropertyString("TextUp"));
-				}
-				*/
-			}
-			
-		}
 	
 		If ($SuccessRate <> $this->GetValue("SuccessRate")) {
 			$this->SetValue("SuccessRate", $SuccessRate);
@@ -224,8 +186,6 @@
 		If ($MaxDuration <> $this->GetValue("MaxDuration")) {
 			$this->SetValue("MaxDuration", $MaxDuration);
 		}
-		$this->SetValue("LastUpdate", time() );
-		
 	}
 	
 	private function Multiple_Ping()
@@ -266,9 +226,6 @@
 		$Result["MinDuration"] = $MinDuration;
 		$Result["AvgDuration"] = $AvgDuration;
 		$Result["MaxDuration"] = $MaxDuration;
-		
-		$this->CheckVPNState();
-		
 	return serialize($Result);
 	}   
 	 
@@ -297,6 +254,7 @@
 		} else {
 			$this->SendDebug("CheckVPNState", "Unbekannte Meldung: ".count($MessageParts), 0);
 		}
+		$this->SetValue("LastUpdate", time() );
 	}
 	    
 	public function StartVPN()
