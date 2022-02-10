@@ -63,8 +63,9 @@
 		
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox", "caption" => "Aktiv"); 
-				
+		/*		
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
+		
 		
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "Gateway", "caption" => "Serveradresse / Server");
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "ID", "caption" => "IPSec-ID / Gruppenname");
@@ -74,7 +75,19 @@
 		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Passwort (Kennwort des FRITZ!Box-Benutzers von Nutzername / Account)");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "LocalPort", "caption" => "Lokaler Port", "minimum" => 0, "maximum" => 65535, "suffix" => "Port");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "DPDidle", "caption" => "Sende DPD wenn unbenutzt für x Sekunden (Default 0)", "minimum" => 0, "maximum" => 86400, "suffix" => "sek");
-
+		*/
+		
+		$arrayExpansionPanelVPN = array();
+		$arrayExpansionPanelVPN[] = array("type" => "ValidationTextBox", "name" => "Gateway", "caption" => "Serveradresse / Server");
+		$arrayExpansionPanelVPN[] = array("type" => "ValidationTextBox", "name" => "ID", "caption" => "IPSec-ID / Gruppenname");
+		$arrayExpansionPanelVPN[] = array("type" => "ValidationTextBox", "name" => "Secret", "caption" => "IPSec-Schlüssel / Shared Secret");
+		$arrayExpansionPanelVPN[] = array("type" => "ValidationTextBox", "name" => "AuthMode", "caption" => "Authentifizierungs-Mode (Default: psk)");
+		$arrayExpansionPanelVPN[] = array("type" => "ValidationTextBox", "name" => "Username", "caption" => "Nutzername / Account");
+		$arrayExpansionPanelVPN[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Passwort (Kennwort des FRITZ!Box-Benutzers von Nutzername / Account)");
+		$arrayExpansionPanelVPN[] = array("type" => "NumberSpinner", "name" => "LocalPort", "caption" => "Lokaler Port", "minimum" => 0, "maximum" => 65535, "suffix" => "Port");
+		$arrayExpansionPanelVPN[] = array("type" => "NumberSpinner", "name" => "DPDidle", "caption" => "Sende DPD wenn unbenutzt für x Sekunden (Default 0)", "minimum" => 0, "maximum" => 86400, "suffix" => "sek");
+		$arrayElements[] = array("type" => "ExpansionPanel", "caption" => "VPN-Daten", "items" => $arrayExpansionPanelVPN);
+		
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________"); 
 		
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP die zum Test im VPN-Zielnetz angepingt werden soll");
