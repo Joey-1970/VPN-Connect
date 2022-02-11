@@ -239,6 +239,7 @@
 		$Response = shell_exec($Message);
 		$Response = trim($Response, "\x00..\x1F");	
 		$MessageParts = explode(PHP_EOL, $Response);
+		$this->SendDebug("CheckVPNState", "Response: ".$Response." MessageParts: ".count($MessageParts, 0);
 		If (count($MessageParts) == 0) {
 			$this->SendDebug("CheckVPNState", "VPN Verbindung besteht nicht", 0);
 			If ($this->GetValue("State") <> 1) {
