@@ -237,10 +237,7 @@
 	{
 		$Message = "ps aux |grep vpnc|grep -v grep|awk '{print $2}'"; 
 		$Response = shell_exec($Message);
-		$Response = trim($Response, "\x00..\x1F");	
-		$MessageParts = explode(PHP_EOL, $Response);
-		$this->SendDebug("CheckVPNState", "Response: ".$Response." MessageParts: ".count($MessageParts), 0);
-		If (count($MessageParts) == 0) {
+		If (strlen($Response) == 0) {
 			$this->SendDebug("CheckVPNState", "VPN Verbindung besteht nicht", 0);
 			If ($this->GetValue("State") <> 1) {
 				$this->SetValue("State", 1);
@@ -249,15 +246,21 @@
 				$this->SendDebug("CheckVPNState", "VPN Verbindung wird wieder aufgebaut", 0);
 				$this->StartVPN();
 			}
-		} elseIf (count($MessageParts) == 1) {
-			$this->SendDebug("CheckVPNState", "VPN Verbindung besteht", 0);
-			If ($this->GetValue("State") <> 3) {
-				$this->SetValue("State", 3);
+		}
+		else {
+			$Response = trim($Response, "\x00..\x1F");	
+			$MessageParts = explode(PHP_EOL, $Response);
+			$this->SendDebug("CheckVPNState", "Response: ".$Response." MessageParts: ".count($MessageParts), 0);
+			If (count($MessageParts) == 1) {
+				$this->SendDebug("CheckVPNState", "VPN Verbindung besteht", 0);
+				If ($this->GetValue("State") <> 3) {
+					$this->SetValue("State", 3);
+				}
+			} elseIf (count($MessageParts) == 4) {
+				$this->SendDebug("CheckVPNState", "VPN Verbindung wird beendet", 0);
+			} else {
+				$this->SendDebug("CheckVPNState", "Unbekannte Meldung: ".count($MessageParts), 0);
 			}
-		} elseIf (count($MessageParts) == 4) {
-			$this->SendDebug("CheckVPNState", "VPN Verbindung wird beendet", 0);
-		} else {
-			$this->SendDebug("CheckVPNState", "Unbekannte Meldung: ".count($MessageParts), 0);
 		}
 		$this->SetValue("LastUpdate", time() );
 	}
