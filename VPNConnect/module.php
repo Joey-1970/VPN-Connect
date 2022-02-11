@@ -293,7 +293,7 @@
 			$this->SendDebug("StartVPN", "Rueckmeldung: ".$Response, 0);
 			$this->SetValue("VPNActive", true);
 			
-			$this->GetDataUpdate();
+			$this->CheckVPNState();
 		}
 	}
 	    
